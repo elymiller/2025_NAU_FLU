@@ -73,8 +73,10 @@ state_to_abbrev = {
     "Wyoming": "WY",}
 
 # Set your local directories
-data_folder = '/Users/l-biosci-posnerlab/Desktop/2025_NAU_FLU/current_job/'
-exp_folder = '/Users/l-biosci-posnerlab/Desktop/2025_NAU_FLU/current_job/exp_files/'
+#data_folder = '/Users/l-biosci-posnerlab/Desktop/2025_NAU_FLU/current_job/'
+#exp_folder = '/Users/l-biosci-posnerlab/Desktop/2025_NAU_FLU/current_job/exp_files/'
+data_folder = '/Users/elymiller/Desktop/Current_Research/2025_NAU_FLU/cleaned_csvs/'
+exp_folder = '/Users/elymiller/Desktop/Current_Research/2025_NAU_FLU/exp_files/'
 
 # Load the COVID data
 covid = pd.read_csv(data_folder + '011426_Hdata.csv')
@@ -91,6 +93,11 @@ end = pm.epiweek_to_date(pm.Epiweek(targetSeason+1, 47))
 # Initialize arrays to hold data for each state
 season2023Data = np.nan * np.zeros((len(state_names), (end-onset).days))
 season2023dateArray = [[] for i in range(len(state_names))]
+
+# Initialize array to accumulate US-wide hospitalizations
+# We'll track the maximum length needed and sum values at each time point
+max_length = 0
+us_hospitalizations = None
 
 # Loop through all states
 for locationIndex in range(len(state_names)):
@@ -127,5 +134,30 @@ for locationIndex in range(len(state_names)):
     # Save the .exp file for the current state
     df.to_csv(exp_folder + targetState + '_flu.exp', sep='\t', index=False)
     
+    # Accumulate hospitalizations for US-wide sum
+    current_length = len(Y23)
+    if current_length > max_length:
+        # Expand the US array if needed
+        if us_hospitalizations is None:
+            us_hospitalizations = np.zeros(current_length)
+        else:
+            # Pad with zeros to match new length
+            us_hospitalizations = np.pad(us_hospitalizations, (0, current_length - max_length), 'constant')
+        max_length = current_length
+    
+    # Add current location's hospitalizations to US sum
+    us_hospitalizations[:current_length] += Y23
+    
     # Output confirmation
     print(f"File saved for {targetState}")
+
+# Save the US-wide summed hospitalizations
+if us_hospitalizations is not None:
+    # Prepare the data for saving
+    us_array = np.transpose(np.array([list(range(len(us_hospitalizations))), us_hospitalizations]))
+    us_df = pd.DataFrame(us_array, columns=['#time', 'H_weekly'])
+    us_df['#time'] = us_df['#time'].astype('int')
+    
+    # Save the .exp file for US cases
+    us_df.to_csv(exp_folder + 'US_cases.exp', sep='\t', index=False)
+    print(f"File saved for US_cases")
