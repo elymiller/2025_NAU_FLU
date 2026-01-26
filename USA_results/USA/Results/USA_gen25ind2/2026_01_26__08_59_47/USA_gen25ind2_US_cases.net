@@ -1,12 +1,12 @@
 # Created by BioNetGen 2.9.2
 begin parameters
-    1 b0__FREE     0.06402539680822057  # Constant
-    2 b1__FREE     0.39626684761544273  # Constant
-    3 gamma__FREE  0.027301872684429795  # Constant
-    4 mult__FREE   333858.6194951164  # Constant
-    5 r__FREE      534.3097804114943  # Constant
-    6 t0__FREE     0.49750769093051966  # Constant
-    7 t1__FREE     21.370440183678284  # Constant
+    1 b0__FREE     0.16471113648646613  # Constant
+    2 b1__FREE     0.6320269011930706  # Constant
+    3 gamma__FREE  0.21547060240827312  # Constant
+    4 mult__FREE   381343.0530992903  # Constant
+    5 r__FREE      888.2284633421878  # Constant
+    6 t0__FREE     0.9964622666191085  # Constant
+    7 t1__FREE     17.93305563279617  # Constant
     8 b0           b0__FREE  # ConstantExpression
     9 t0           t0__FREE  # ConstantExpression
    10 mult         mult__FREE  # ConstantExpression

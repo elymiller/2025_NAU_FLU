@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 #exp_file = "/Users/l-biosci-posnerlab/Desktop/2025_NAU_FLU/current_job/exp_files/Alabama_flu.exp"
 exp_file = "/Users/elymiller/Desktop/Current_Research/2025_NAU_FLU/exp_files/US_cases.exp"
 #gdat_file = "/Users/elymiller/Desktop/covid_model_test/Alabama/Results/Alabama_gen70ind11/2025_09_23__16_51_08/Alabama_gen70ind11_Alabama_flu.gdat"  
-gdat_file = "/Users/elymiller/Desktop/Current_Research/2025_NAU_FLU/USA_results/USA/Results/USA_gen28ind3/2026_01_16__12_11_30/USA_gen28ind3_US_cases.gdat"  
+gdat_file = "/Users/elymiller/Desktop/Current_Research/2025_NAU_FLU/USA_results/USA/Results/USA_gen25ind2/2026_01_26__08_59_47/USA_gen25ind2_US_cases.gdat"  
 
 ##exp_check = "/Users/elymiller/Desktop/covid_model_test/confirm_alabama.exp"
 

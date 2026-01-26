@@ -2,11 +2,11 @@ begin model
 begin parameters###
 b0__FREE 0.05
 b1__FREE 0.05
-gamma__FREE 0.01
-mult__FREE 300000.0
+gamma__FREE 0.2
+mult__FREE 380000.0
 r__FREE 20.0
 t0__FREE 7.0
-t1__FREE 19.0
+t1__FREE 17.0
 
 ###-adjustable parameter values-###
 b0 b0__FREE # beta for first period (t0)
