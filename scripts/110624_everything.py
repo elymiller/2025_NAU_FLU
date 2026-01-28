@@ -30,19 +30,41 @@ def check_and_create_files(state_names, template_conf_file, template_bngl, conf_
 def generate_combined_mle_file_AMCMC(state_names, base_dir, output_file):
     with open(output_file, 'w') as combined_mle_file:
         for state in state_names:
-            params_file_path = os.path.join(base_dir, state, 'Results/A_MCMC/Runs/params_0.txt')
+            params_file_path = os.path.join(base_dir, state, 'Results/sorted_params_final.txt')
             if os.path.exists(params_file_path):
                 with open(params_file_path, 'r') as params_file:
                     lines = params_file.readlines()
                     
-                    if len(lines) > 1:  # Ensure there are at least 2 lines
-                        second_row = lines[1].strip()  # Second row contains the params
-                        # Split the parameters into a list and join them with commas
-                        formatted_params = " ".join(second_row.split())
-                        # Write to the combined file in the desired format
-                        combined_mle_file.write(f"{state}: {formatted_params}\n")
+                    if len(lines) > 1:  # Ensure there are at least 2 lines (skip first row)
+                        # Get row 2 (index 1, after skipping header row 0)
+                        second_row = lines[1].strip()
+                        # Split by tab (or whitespace) to get columns
+                        columns = second_row.split()
+                        
+                        # Skip first two columns (indices 0 and 1), then extract columns 2-8 (indices 2-8)
+                        # Reorder as: 2, 4, 5, 6, 7, 3, 8 (0-indexed)
+                        if len(columns) > 8:
+                            # Extract columns 2-8 (skip first two columns)
+                            params = columns[2:9]  # columns 2 through 8 (inclusive)
+                            # Reorder: 2, 4, 5, 6, 7, 3, 8
+                            # params indices: 0=col2, 1=col3, 2=col4, 3=col5, 4=col6, 5=col7, 6=col8
+                            reordered_params = [
+                                params[0],  # col2 (index 0 in params)
+                                params[2],  # col4 (index 2 in params)
+                                params[3],  # col5 (index 3 in params)
+                                params[4],  # col6 (index 4 in params)
+                                params[5],  # col7 (index 5 in params)
+                                params[1],  # col3 (index 1 in params)
+                                params[6]   # col8 (index 6 in params)
+                            ]
+                            # Join with spaces
+                            formatted_params = " ".join(reordered_params)
+                            # Write to the combined file in the desired format
+                            combined_mle_file.write(f"{state}: {formatted_params}\n")
+                        else:
+                            print(f"Skipping {state}: Not enough columns in row 2.")
             else:
-                print(f"Skipping {state}: params_0.txt file not found.")
+                print(f"Skipping {state}: sorted_params_final.txt file not found.")
 
 def generate_combined_mle_file_DE(state_names, base_dir, output_file):
     with open(output_file, 'w') as combined_mle_file:
